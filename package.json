@@ -1,5 +1,5 @@
 {
-  "name": "content-templates",
+  "name": "gutenipsum",
   "version": "3.0.0",
   "license": "MIT",
   "main": "blocks/index.js",
@@ -31,6 +31,9 @@
     "webpack": "^3.11.0"
   },
   "dependencies": {
+    "install": "^0.12.2",
+    "lorem-ipsum": "^2.0.3",
+    "npm": "^6.9.0",
     "react-images": "^1.0.0",
     "react-photo-gallery": "^7.0.2"
   }

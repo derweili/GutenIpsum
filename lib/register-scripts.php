@@ -1,6 +1,6 @@
 <?php
 
-namespace Derweili\Content_Templates;
+namespace Derweili\GutenIpsum;
 
 $js_dependencies = [ 'wp-plugins', 'wp-element', 'wp-edit-post', 'wp-i18n', 'wp-api-request', 'wp-data', 'wp-components', 'wp-blocks', 'wp-editor', 'wp-compose' ];
 
@@ -72,7 +72,7 @@ function plugin_assets(){
 	error_log('plugin assets' . _get_plugin_url() . $plugin_js_path );
 	
 	wp_enqueue_script(
-		"derweilicontenttemplates-plugin-js",
+		"derweiligutenipsum-plugin-js",
 		_get_plugin_url() . $plugin_js_path,
 		$js_dependencies,
 		filemtime( _get_plugin_directory() . $plugin_js_path ),
@@ -81,7 +81,7 @@ function plugin_assets(){
 	
 	$plugin_css_path = "/assets/css/plugins.editor.css";
 	wp_enqueue_style(
-		"derweilicontenttemplates-plugin-css",
+		"derweiligutenipsum-plugin-css",
 		_get_plugin_url() . $plugin_css_path,
 		[],
 		filemtime( _get_plugin_directory() . $plugin_css_path )

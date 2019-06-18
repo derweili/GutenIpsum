@@ -1,16 +1,15 @@
 const { __ } = wp.i18n;
 const { Fragment } = wp.element;
-const { PanelBody, PanelRow, Button, Modal } = wp.components;
+const { PanelBody, PanelRow, Button, Modal, TextControl, RadioControl, ClipboardButton } = wp.components;
 const { registerPlugin } = wp.plugins;
 const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
-const { parse } = wp.blockSerializationDefaultParser;
 const { select, dispatch} = wp.data;
 const apiRequest = wp.apiRequest;
 const ajax= wp.ajax;
 
 const {createBlock, rawHandler} = wp.blocks;
 
-
+import { loremIpsum } from "lorem-ipsum";
 
 import "./plugin.scss";
 
@@ -18,152 +17,187 @@ import "./plugin.scss";
  * 
  */
 
-class ContentTemplatesSidebar extends React.Component {
+class GutenIpsumSidebar extends React.Component {
 
     state = {
-        templates : [], // available templates
-        selectedTemplate: null, // currently selected template
-        isOpen: false // is modal open
+        text: '',                // generated Lorem Ipsum Text
+        hasCopied: false,        // store if text was copied
+        units: "sentences",      // paragraph(s), "sentence(s)", or "word(s)"
+        count: 3,                // Number of "words", "sentences", or "paragraphs"
+        paragraphLowerBound: 3,  // Min. number of sentences per paragraph.
+        paragraphUpperBound: 7,  // Max. number of sentences per paragarph.
+        random: Math.random,     // A PRNG function
+        sentenceLowerBound: 5,   // Min. number of words per sentence.
+        sentenceUpperBound: 15,  // Max. number of words per sentence.
     };
 
     /**
-     * Load Available Templates
+     * Auto Generate Lorem Ipsum Text on Component Mount for the first time
      */
     componentDidMount(){
+        const text = this.createLoremIpsum();
+        this.setState({text});
+    }
 
-        apiRequest( { path: '/wp/v2/content-template' } ).then( posts => {
-            console.log('posts', posts);
-            this.onNewPosts( posts );
-        } );
+    /**
+     * Create Lorem Ipsum text based on state and store text in state
+     */
+    createLoremIpsum(){
+        const { units, count, paragraphLowerBound, paragraphUpperBound, sentenceLowerBound, sentenceUpperBound} = this.state;
+        const text = loremIpsum({
+            units,
+            count: count,
+            format: "html",
+            paragraphLowerBound,
+            paragraphUpperBound,
+            sentenceLowerBound,
+            sentenceUpperBound
+        });
+        return text;
+    }
+
+    /**
+     * Insert Text into Editor
+     * 
+     * @param {string} text Text as HTML to insert
+     */
+    onInstertContent( text ){
+        var gutblock = wp.blocks.rawHandler({ 
+            HTML:  text,
+        });
+
+        // insert new Blocks
+        dispatch("core/editor").insertBlocks(gutblock);
 
     }
 
     /**
-     * Receive Templates from REST API
+     * Set state middleware to auto generate Lorem Ipsum text after state change of properties
      * 
-     * @param {array} posts Content Template Posts (REST)
+     * @param {object} values state object that should be parsed to setState
      */
-    onNewPosts( posts ){
-
-        const templates = posts.map( post => {
-
-            return {
-                id: post.id,
-                title: post.title.rendered,
-                content: post.plain_content,
-                icon: post.icon
-            }
-
+    onChangeValues( values ){
+        this.setState( values, () => {
+            const text = this.createLoremIpsum();
+            this.setState({text});
         })
-
-        this.setState( {templates } );
-
-        console.log('new Posts', this.state.templates);
-    }
-
-    onReloadEditor(){
-    }
-
-    /**
-     * Overwrite Blocks on Template Select
-     * 
-     * @param {*} template Selected Template
-     * @param {*} force Skip user consent modal
-     */
-    onSelectTemplate( template, force = false){
-        // const newBlockTemplate = parse(template.content);
-        // console.log('newBlockTemplate', newBlockTemplate);
-
-        const isNewPost = select("core/editor").isCleanNewPost();
-
-        // show warning if 
-        if (force || isNewPost){
-
-            // get an array of gutenberg blocks from raw HTML (parse blocks)
-            var gutblock = wp.blocks.rawHandler({ 
-                HTML:  template.content,
-            });
-
-            // re-serialize blocks
-            // var serelized = wp.blocks.serialize(gutblock);
-            // serelized = serelized;
-
-            // delete all Blocks
-            dispatch("core/editor").resetBlocks([]);
-
-            // insert new Blocks
-            dispatch("core/editor").insertBlocks(gutblock, 0);
-
-            // close Modal and reset selected Template
-            this.setState({isOpen:false, selectedTemplate: null})
-
-        }else{
-            this.setState({
-                isOpen: true,
-                selectedTemplate: template
-            });
-        }
-    }
-
-    /**
-     * Close the user consent modal
-     */
-    closeModal(){
-        this.setState({isOpen:false, selectedTemplate: null})
     }
 
     render(){
 
-        const { templates, isOpen } = this.state;
-
+        const {
+            units, 
+            isOpen, 
+            count, 
+            hasCopied, 
+            text, 
+            paragraphLowerBound, 
+            paragraphUpperBound,
+            sentenceLowerBound,
+            sentenceUpperBound
+        } = this.state;
+          
         return (
             <Fragment>
-                <PluginSidebarMoreMenuItem target="content-templates-sidebar">
-                    {__("Content Templates", "jsforwpadvblocks")}
+                <PluginSidebarMoreMenuItem target="gutenipsum-sidebar">
+                    {__("GutenIpsum", "gutenipsum")}
                 </PluginSidebarMoreMenuItem>
                 <PluginSidebar
-                    name="content-templates-sidebar"
-                    title={__("Content Templates", "jsforwpadvblocks")}
+                    name="gutenipsum-sidebar"
+                    title={__("GutenIpsum", "gutenipsum")}
                 >
-                    <PanelBody title={__("Select a Template", "jsforwpadvblocks")} opened>
+                    <PanelBody title={__("Generate Lorem Ipsum Text", "gutenipsum")} opened>
                         <PanelRow>
-                            <ul className="content-template-button-list">
-                                {
-                                    templates.map(template => {
-                                        return (
-                                            <li key={template.id}>
-                                                <Button isDefault onClick={ () => { this.onSelectTemplate(template) } } className="template-button">
-                                                    <img src={template.icon}  width="40"/>
-                                                    {template.title}
-                                                </Button>
-                                            </li>           
-                                        );
-                                    })
-                                }
-                            </ul>
+                            <RadioControl
+                                label={__("Unit", "gutenipsum")}
+                                help=""
+                                selected={ units }
+                                options={ [
+                                    { label: __("Words", "gutenipsum"), value: 'words' },
+                                    { label: __("Sentences", "gutenipsum"), value: 'sentences' },
+                                    { label: __("Paragraphs", "gutenipsum"), value: 'paragraphs' },
+                                ] }
+                                onChange={ ( units ) => { this.onChangeValues( { units } ) } }
+                            />
+                      </PanelRow>
+                      <PanelRow>
+                            <TextControl
+                                label={` Number of ${units}` }
+                                value={ count }
+                                type="number"
+                                min="1"
+                                onChange={ ( number ) => {this.onChangeValues( { count: parseInt(number) } )} }
+                            />
+                      </PanelRow>
+                      <PanelRow>
+                        <ClipboardButton
+                            isDefault
+                            isLarge
+                            text={text}
+                            onCopy={ () => this.setState( { hasCopied: true } ) }
+                            onFinishCopy={ () => this.setState( { hasCopied: false } ) }
+                        >
+                            { hasCopied ? __("Copied!", "gutenipsum") : __("Copy to Clipboard", "gutenipsum") }
+                        </ClipboardButton>
+                      </PanelRow>
+                      <PanelRow>
+                        <Button
+                            isDefault
+                            onClick={ () => { this.onInstertContent( text ) } }
+                        >
+                            {__("Insert into Content", "gutenipsum")}
+                        </Button>
+                      </PanelRow>
+                    </PanelBody>
+                    <PanelBody title={__("Advanced Settings", "gutenipsum")} initialOpen={ false } >
+                        <PanelRow>
+                            <TextControl
+                                label={__("Min. number of sentences per paragraph.", "gutenipsum")}
+                                value={ paragraphLowerBound }
+                                type="number"
+                                min="1"
+                                onChange={ ( paragraphLowerBound ) => {this.onChangeValues( { paragraphLowerBound: parseInt(paragraphLowerBound) } )} }
+                                />
                         </PanelRow>
-                        </PanelBody>
+                        <PanelRow>
+                            <TextControl
+                                label={__("Max. number of sentences per paragarph.", "gutenipsum")}
+                                value={ paragraphUpperBound }
+                                type="number"
+                                min="1"
+                                onChange={ ( paragraphUpperBound ) => {this.onChangeValues( { paragraphUpperBound: parseInt(paragraphUpperBound) } )} }
+                                />
+                        </PanelRow>
+                        <PanelRow>
+                            <TextControl
+                                label={__("Min. number of words per sentence.", "gutenipsum")}
+                                value={ sentenceLowerBound }
+                                type="number"
+                                min="1"
+                                onChange={ ( sentenceLowerBound ) => {this.onChangeValues( { sentenceLowerBound: parseInt(sentenceLowerBound) } )} }
+                                />
+                        </PanelRow>
+                        <PanelRow>
+                            <TextControl
+                                label={__("Max. number of words per sentence.", "gutenipsum")}
+                                value={ sentenceUpperBound }
+                                type="number"
+                                min="1"
+                                onChange={ ( sentenceUpperBound ) => {this.onChangeValues( { sentenceUpperBound: parseInt(sentenceUpperBound) } )} }
+                                />
+                        </PanelRow>
+                        
+                    </PanelBody>
+                    <PanelBody title={__("Lorem Ipsum", "gutenipsum")} opened>
+                        <div dangerouslySetInnerHTML={ { __html : text } }></div>
+                    </PanelBody>
                 </PluginSidebar>
-                {
-                    isOpen && (
-                        <Modal
-                            title="Overwrite Content"
-                            onRequestClose={ () => this.closeModal() }>
-                            <p>
-                                Do you want to overwrite all Existing Content?
-                            </p>
-                            <Button isPrimary onClick={ () => { this.onSelectTemplate( this.state.selectedTemplate, true ) } } >
-                                Overwrite Content
-                            </Button>
-                        </Modal>
-                    )
-                }
             </Fragment>
         )
     }
 }
 
-registerPlugin( "contenttemplates-sidebar", {
-    icon: "layout",
-    render: ContentTemplatesSidebar
+registerPlugin( "gutenipsum-sidebar", {
+    icon: "editor-alignleft",
+    render: GutenIpsumSidebar
 })

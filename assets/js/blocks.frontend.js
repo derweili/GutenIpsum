@@ -60,18 +60,15 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 108);
+/******/ 	return __webpack_require__(__webpack_require__.s = 110);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 108:
+/***/ 110:
 /***/ (function(module, exports) {
 
-/**
- * Import example blocks with frontend code
- */
-// import "./01-gallery/frontend";
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/werbeagenten/Sites/gutenberg/wp-content/plugins/gutenipsum/blocks/frontend.js'");
 
 /***/ })
 

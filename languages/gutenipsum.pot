@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: plugins/01-content-templates-sidebar/index.js:107
+msgid "GutenIpsum"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:109
+msgid "Generate Lorem Ipsum Text"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:112
+msgid "Unit"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:116
+msgid "Words"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:117
+msgid "Sentences"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:118
+msgid "Paragraphs"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:140
+msgid "Copied!"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:140
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:148
+msgid "Insert into Content"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:152
+msgid "Advanced Settings"
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:155
+msgid "Min. number of sentences per paragraph."
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:164
+msgid "Max. number of sentences per paragarph."
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:173
+msgid "Min. number of words per sentence."
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:182
+msgid "Max. number of words per sentence."
+msgstr ""
+
+#: plugins/01-content-templates-sidebar/index.js:191
+msgid "Lorem Ipsum"
+msgstr ""

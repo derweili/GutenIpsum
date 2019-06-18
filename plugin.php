@@ -2,24 +2,24 @@
 /**
  * Main plugin file
  *
- * @package     Derweili\Content_Templates
- * @author      Zac Gordon (@zgordon)
+ * @package     Derweili\GutenIpsum
+ * @author      Julian Weiland (@derweili)
  * @license     GPL2+
  *
  * @wordpress-plugin
- * Plugin Name: Content Templates
+ * Plugin Name: GutenIpsum
  * Plugin URI:  https://derweili.de
- * Description: Content Templates for WordPress
+ * Description: Generate blind text in Gutenberg. Insert dummy text directly into Gutenberg as text paragraphs.
  * Version:     1.0.0
  * Author:      Derweili
  * Author URI:  https://derweili.de
- * Text Domain: content-templates
+ * Text Domain: gutenipsum
  * Domain Path: /languages
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-namespace Derweili\Content_Templates;
+namespace Derweili\GutenIpsum;
 
 //  Exit if accessed directly.
 defined('ABSPATH') || exit;
@@ -60,8 +60,6 @@ function _get_plugin_url() {
 // Enqueue JS and CSS
 include __DIR__ . '/lib/register-scripts.php';
 
-// Register Post Type
-include __DIR__ . '/lib/register-post-type.php';
 
 
 // Register block server side
