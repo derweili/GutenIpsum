@@ -10,7 +10,7 @@
  * Plugin Name: GutenIpsum
  * Plugin URI:  https://github.com/derweili/GutenIpsum
  * Description: Generate blind text in Gutenberg. Insert dummy text directly into Gutenberg as text paragraphs.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Derweili
  * Author URI:  https://derweili.de
  * Text Domain: gutenipsum
