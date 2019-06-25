@@ -1,6 +1,6 @@
 const { __ } = wp.i18n;
 const { Fragment } = wp.element;
-const { PanelBody, PanelRow, Button, Modal, TextControl, RadioControl, ClipboardButton } = wp.components;
+const { PanelBody, PanelRow, Button, Modal, TextControl, RadioControl, ClipboardButton, Snackbar } = wp.components;
 const { registerPlugin } = wp.plugins;
 const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
 const { select, dispatch} = wp.data;
@@ -48,10 +48,10 @@ class GutenIpsumSidebar extends React.Component {
             units,
             count: count,
             format: "html",
-            paragraphLowerBound,
-            paragraphUpperBound,
-            sentenceLowerBound,
-            sentenceUpperBound
+            paragraphLowerBound: paragraphLowerBound <= paragraphUpperBound ? paragraphLowerBound : paragraphUpperBound,
+            paragraphUpperBound: paragraphUpperBound >= paragraphLowerBound ? paragraphUpperBound : paragraphLowerBound,
+            sentenceLowerBound: sentenceLowerBound <= sentenceUpperBound ? sentenceLowerBound : sentenceUpperBound,
+            sentenceUpperBound: sentenceUpperBound >= sentenceLowerBound ? sentenceUpperBound : sentenceLowerBound,
         });
         return text;
     }
@@ -156,6 +156,7 @@ class GutenIpsumSidebar extends React.Component {
                                 value={ paragraphLowerBound }
                                 type="number"
                                 min="1"
+                                max={ paragraphUpperBound }
                                 onChange={ ( paragraphLowerBound ) => {this.onChangeValues( { paragraphLowerBound: parseInt(paragraphLowerBound) } )} }
                                 />
                         </PanelRow>
@@ -164,7 +165,7 @@ class GutenIpsumSidebar extends React.Component {
                                 label={__("Max. number of sentences per paragarph.", "gutenipsum")}
                                 value={ paragraphUpperBound }
                                 type="number"
-                                min="1"
+                                min={ paragraphLowerBound }
                                 onChange={ ( paragraphUpperBound ) => {this.onChangeValues( { paragraphUpperBound: parseInt(paragraphUpperBound) } )} }
                                 />
                         </PanelRow>
@@ -174,6 +175,7 @@ class GutenIpsumSidebar extends React.Component {
                                 value={ sentenceLowerBound }
                                 type="number"
                                 min="1"
+                                max={sentenceUpperBound}
                                 onChange={ ( sentenceLowerBound ) => {this.onChangeValues( { sentenceLowerBound: parseInt(sentenceLowerBound) } )} }
                                 />
                         </PanelRow>
@@ -182,7 +184,7 @@ class GutenIpsumSidebar extends React.Component {
                                 label={__("Max. number of words per sentence.", "gutenipsum")}
                                 value={ sentenceUpperBound }
                                 type="number"
-                                min="1"
+                                min={sentenceLowerBound}
                                 onChange={ ( sentenceUpperBound ) => {this.onChangeValues( { sentenceUpperBound: parseInt(sentenceUpperBound) } )} }
                                 />
                         </PanelRow>

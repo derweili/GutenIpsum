@@ -37,6 +37,11 @@ echo "Create SVN Tag"
 svn cp trunk tags/$TRAVIS_TAG
 echo "Tag created"
 
+svn add trunk/*
+svn add assets/*
+svn add tags/$TRAVIS_TAG/*
+
+
 # 8. Push SVN tag
 echo "Push svn tag"
 svn ci  --message "Release $TRAVIS_TAG" \
