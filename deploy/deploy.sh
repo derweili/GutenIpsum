@@ -44,6 +44,8 @@ svn add tags/$TRAVIS_TAG/*
 
 # 8. Push SVN tag
 echo "Push svn tag"
+echo "Authentication with Username:"
+echo $SVN_USERNAME
 svn ci  --message "Release $TRAVIS_TAG" \
         --username $SVN_USERNAME \
         --password $SVN_PASSWORD \
