@@ -3,6 +3,7 @@ echo "Starting Deployment"
 
 # 1. Clone complete SVN repository to separate directory
 echo "Cloning SVN repository"
+echo $SVN_REPOSITORY
 svn co $SVN_REPOSITORY ../svn
 echo "Clonging successfull"
 
