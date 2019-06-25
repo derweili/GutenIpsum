@@ -2,7 +2,7 @@
 	"presets": [ "@wordpress/default" ],
 	"plugins": [
 		[ "@wordpress/babel-plugin-makepot", {
-			"output": "languages/gutenipsum.pot"
+			"output": "languages/content-templates.pot"
 		} ],
 		"transform-class-properties"
 	]
