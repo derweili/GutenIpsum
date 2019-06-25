@@ -1,6 +1,6 @@
 {
   "name": "gutenipsum",
-  "version": "0.2",
+  "version": "1.0.0",
   "license": "GPL2",
   "main": "blocks/index.js",
   "repository": {
