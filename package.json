@@ -1,11 +1,11 @@
 {
   "name": "gutenipsum",
-  "version": "3.0.0",
-  "license": "MIT",
+  "version": "0.2",
+  "license": "GPL2",
   "main": "blocks/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/derweili/content-templates"
+    "url": "https://github.com/derweili/GutenIpsum"
   },
   "scripts": {
     "start": "cross-env BABEL_ENV=default webpack --watch",
