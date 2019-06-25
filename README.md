@@ -9,6 +9,9 @@ Insert dummy text directly into Gutenberg as text paragraphs
 4. Open the GutenIpsum Sidebar via the Icon on the top Right or choose Options > GutenIpsum
 5. Generate Lorem Ipsum Text
 
+<img src="https://raw.githubusercontent.com/derweili/GutenIpsum/master/plugin-assets/screenshot-1.png" width="200">
+
+
 ## Development
 
 1. Download or fork the repo
